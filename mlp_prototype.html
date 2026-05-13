@@ -411,7 +411,7 @@ textarea:focus { border-color: #16a34a; }
     <hr class="nav-divider">
     <div class="nav-item active" id="nav-payments"><svg width="14" height="14" fill="none" viewBox="0 0 14 14"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M4.5 7h5M7 4.5v5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>Payments<svg class="nav-expand open" id="navExpandIcon" width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2.5 4l2.5 2.5L7.5 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg></div>
     <div class="nav-item sub" id="sub-rtp" onclick="showSection('rtp')">Ready to Pay</div>
-    <div class="nav-item sub active" id="sub-inqueue" onclick="showSection('inqueue')">In Queue</div>
+    <div class="nav-item sub active" id="sub-inqueue" onclick="showSection('inqueue')">Pending on Me</div>
     <div class="nav-item sub" id="sub-pending" onclick="showSection('pending')">Pending on Others</div>
     <div class="nav-item sub" id="sub-alltx" onclick="showSection('alltx')">All Transactions</div>
     <hr class="nav-divider">
@@ -427,7 +427,7 @@ textarea:focus { border-color: #16a34a; }
 <div class="main">
   <div class="announce-bar"><svg width="13" height="13" fill="none" viewBox="0 0 13 13"><circle cx="6.5" cy="6.5" r="5.5" stroke="#d97706" stroke-width="1.1"/><path d="M6.5 5.5v4" stroke="#d97706" stroke-width="1.1" stroke-linecap="round"/><circle cx="6.5" cy="3.5" r="0.6" fill="#d97706"/></svg>7PM is the cut-off time for NEFT &amp; RTGS. For faster clearance please choose IMPS (Fast) for payments below ₹5 lakhs</div>
   <div class="topbar">
-    <div class="page-title" id="pageTitle">Payments / In Queue</div>
+    <div class="page-title" id="pageTitle">Payments / Pending on Me</div>
     <div class="topbar-right">
       <div class="icon-btn"><svg width="13" height="13" fill="none" viewBox="0 0 13 13"><path d="M11 6.5A4.5 4.5 0 1 1 6.5 2" stroke="#888" stroke-width="1.2" stroke-linecap="round"/><path d="M11 2v4H7" stroke="#888" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       <div class="icon-btn"><svg width="13" height="13" fill="none" viewBox="0 0 13 13"><ellipse cx="6.5" cy="6.5" rx="5.5" ry="3.5" stroke="#888" stroke-width="1.1"/><circle cx="6.5" cy="6.5" r="1.5" fill="#888"/></svg></div>
@@ -464,7 +464,7 @@ textarea:focus { border-color: #16a34a; }
     </div>
 
     <!-- ══════════════════════════════════════
-         SECTION: IN QUEUE
+         SECTION: Pending on Me
     ══════════════════════════════════════ -->
     <div class="section active" id="sec-inqueue">
       <div class="bank-cards-row" id="iq-cards"></div>
@@ -666,7 +666,7 @@ const pendingPayments = [
   { id:32, bankId:'b2', name:'Prakash Traders',     ini:'PT', bg:'#fce7f3', fg:'#9d174d', acc:'Yes A/C xx5501',   amt:'₹9,15,000.00',   raw:915000.00,   date:'15 Apr', uploadedAt:'13 Apr', payMethod:'FAST',   title:'Vendor Settlement Apr',    mode:'IMPS', branch:'Mumbai',       cat:'Legal',  po:'--',           bu:'Legal',   cc:'LEG-003', dept:'Legal',       next:'Any 1 Finance Controller must approve. After approval, you will authorise.', isNew:false, pendingWith:['Priya Nair','Kiran Rao'], totalLevels:2, doneLevels:1, auditTrail:[{action:'Level 1 approved',by:'Kiran Rao',time:'14 Apr, 10:30 AM',done:true},{action:'Payment created',by:'You',time:'13 Apr, 10:00 AM',done:true}] },
 ];
 
-/* Admin In Queue: mix of approval-pending and auth-pending payments */
+/* Admin Pending on Me: mix of approval-pending and auth-pending payments */
 const inQueuePayments = [
   /* --- Needs Admin APPROVAL --- */
   { id:10, bankId:'b1', name:'Kiran Industries',    ini:'KI', bg:'#fef3c7', fg:'#92400e', acc:'HDFC A/C xx3301',  amt:'₹18,45,000.00',  raw:1845000.00,  date:'20 May', uploadedAt:'18 May', payMethod:'SECURE', title:'Raw Material Apr',         mode:'NEFT', branch:'Mumbai',       cat:'Ops',    po:'PO-2025-0041', bu:'Supply', cc:'SUP-001', dept:'Operations',  createdBy:'Priya N.',   creatorIni:'PN', creatorBg:'#e0f2fe', creatorFg:'#075985', iqType:'approval', totalLevels:1, doneLevels:0, next:'Your approval is needed. Once approved, you can also authorise as the eligible authoriser.', auditTrail:[{action:'Payment created',by:'Priya N.',time:'18 May, 09:15 AM',done:true}] },
@@ -768,7 +768,7 @@ function showSection(name) {
   document.getElementById('sec-'+name).classList.add('active');
   document.querySelectorAll('.nav-item.sub').forEach(n=>n.classList.remove('active'));
   document.getElementById('sub-'+name).classList.add('active');
-  const titles = { rtp:'Payments / Ready to Pay', inqueue:'Payments / In Queue', pending:'Payments / Pending on Others', alltx:'Payments / All Transactions' };
+  const titles = { rtp:'Payments / Ready to Pay', inqueue:'Payments / Pending on Me', pending:'Payments / Pending on Others', alltx:'Payments / All Transactions' };
   document.getElementById('pageTitle').textContent = titles[name] || 'Payments';
   closePanel();
   if(name==='rtp') renderRTP();
@@ -835,7 +835,7 @@ function renderRTPTable() {
   }
 }
 
-/* ── IN QUEUE ── */
+/* ── Pending on Me ── */
 let iqSelected = new Set();
 let iqFilterMode = 'all';
 let poFilterMode = 'all';
